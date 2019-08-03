@@ -13,13 +13,10 @@ int main()
     void * context = zmq_ctx_new();
     ERROR_CHECK(context, NULL, "zmq_ctx_new");
 
-    int ret = zmq_ctx_set(context, ZMQ_MAX_SOCKETS, 1); 
-    ERROR_CHECK(ret, 0, "zmq_ctx_set");
-    
     void * subscriber = zmq_socket(context, ZMQ_SUB);
     ERROR_CHECK(subscriber, NULL, "zmq_socket");
     
-    ret = zmq_connect(subscriber, "tcp://192.168.23.128:8888");
+    int ret = zmq_connect(subscriber, "tcp://192.168.23.128:8888");
     ERROR_CHECK(ret, 0, "zmq_connect");
     
     ret = zmq_setsockopt(subscriber, ZMQ_SUBSCRIBE, "", 0);
