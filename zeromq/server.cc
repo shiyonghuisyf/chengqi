@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <signal.h>
 #include <errno.h>
 #include <time.h>
 #include <string>
@@ -35,22 +36,31 @@ void GetStr(char* random)//生成随机内容
     sprintf(random, "%s", str);
 }
 
+void * context = zmq_ctx_new();
+void * publisher = zmq_socket(context, ZMQ_PUB);
+
+void sigFunc(int signum)
+{
+    char buf[512] = {0};
+    bzero(&buf, 512);
+    buf[0] = '0';
+    zmq_send(publisher, buf, 512, 0);
+    zmq_close(publisher);
+    zmq_ctx_destroy(context);
+    exit(0);
+}
 
 int main()
 {
-    void * context = zmq_ctx_new();
     ERROR_CHECK(context, NULL, "zmq_ctx_new");
-    
-    int ret = zmq_ctx_set(context, ZMQ_MAX_SOCKETS, 1);
-    ERROR_CHECK(ret, 0, "zmq_ctx_set");
-
-    void * publisher = zmq_socket(context, ZMQ_PUB);
     ERROR_CHECK(publisher, NULL, "zmq_socket");
 
-    ret = zmq_bind(publisher, "tcp://192.168.23.128:8888");
+    int ret = zmq_bind(publisher, "tcp://192.168.23.128:8888");
     ERROR_CHECK(ret, 0, "zmq_bind");
 
     char Buf[512] = {0};
+    signal(SIGINT, sigFunc); 
+
     while(1)
     {
         bzero(&Buf, 512);

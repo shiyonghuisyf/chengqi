@@ -32,7 +32,12 @@ int main()
         ret = zmq_recv(subscriber, Buf, 512, 0);
         if(ret > 0)
         {
-            printf("%s\n", Buf);
+            if(strcmp(Buf, "0") == 0)
+            {
+                break;
+            }else {
+                printf("%s\n", Buf);
+            }
         }
     }
     zmq_close(subscriber);
