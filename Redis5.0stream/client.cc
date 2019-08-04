@@ -15,7 +15,8 @@ int main()
     }
     char str[512] = {0};
     string s;
-    string comsumer = itoa((int)getpid());
+    itoa(getpid(), str, 10);
+    string comsumer = str;
 
     while(1)
     {
