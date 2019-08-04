@@ -79,7 +79,7 @@ int main(int argc, char * argv[])
 
         GetStr(pStr);
         num = epoll_wait(epfd, evs, 1, 5);
-        if(evs[num].data.fd == exitfds[0])
+        if(evs[0].data.fd == exitfds[0])
         {
             bzero(pStr, 512);
             pStr[0] = '0';
