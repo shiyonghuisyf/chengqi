@@ -1,3 +1,5 @@
+#include <stdio.h>
+#include <stdlib.h>
 #include <unistd.h>
 #include <iostream>
 #include "redis.h"
@@ -13,7 +15,8 @@ int main()
     }
     char str[512] = {0};
     string s;
-    string comsumer("c1");
+    string comsumer = itoa((int)getpid());
+
     while(1)
     {
         s = r -> get(comsumer);
